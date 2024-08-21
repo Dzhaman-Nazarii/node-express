@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import expressHandlebars from "express-handlebars";
+import { homeRoutes } from "./routes/home.js";
+import { coursesRoutes } from "./routes/courses.js";
+import { addRoutes } from "./routes/add.js";
 
 const app = express();
 
@@ -13,17 +16,13 @@ app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
-
-app.get("/", (req: Request, res: Response): void => {
-	res.render("index");
-});
-
-app.get("/about", (req: Request, res: Response): void => {
-	res.render("about");
-});
-
 dotenv.config();
 const PORT = process.env.PORT || 8080;
+
+app.use(express.static("public"));
+app.use("/", homeRoutes);
+app.use("/courses", coursesRoutes);
+app.use("/add", addRoutes);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
