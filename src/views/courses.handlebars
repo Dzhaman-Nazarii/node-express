@@ -11,9 +11,13 @@
 						<h3>{{title}}</h2>
 						<h4 class="price">{{price}}$</h4>
 					</div>
-					<div class="card-action">
+					<div class="card-action actions">
 						<a href="/courses/{{id}}" target="_blank">Open course</a>
 						<a href="/courses/{{id}}/edit?allow=true">Edit course</a>
+						<form action="/card/add" method="post">
+						<input type="hidden" name="id" value="{{id}}">
+							<button type="submit" class="btn btn-primary">Buy</button>
+						</form>
 					</div>
 				</div>
 			</div>
