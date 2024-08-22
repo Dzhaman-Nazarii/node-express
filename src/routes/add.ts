@@ -1,9 +1,16 @@
-import {Request, Response, Router} from "express";
+import { Request, Response, Router } from "express";
+import { Course } from "../models/course.js";
 
 const addRoutes = Router();
 
 addRoutes.get("/", (req: Request, res: Response): void => {
-	res.render("index", {title: "Add page", isAdd: true});
+	res.render("add", { title: "Add page", isAdd: true });
 });
 
-export {addRoutes};
+addRoutes.post("/", async (req: Request, res: Response): Promise<void> => {
+	const course = new Course(req.body.title, req.body.price, req.body.img);
+	await course.save();
+	res.redirect("/courses");
+});
+
+export { addRoutes };

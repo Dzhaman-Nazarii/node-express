@@ -17,8 +17,10 @@
 	"author": "Nazarii Dzhaman",
 	"license": "ISC",
 	"dependencies": {
+		"@types/uuid": "^10.0.0",
 		"express": "^4.19.2",
-		"express-handlebars": "^8.0.1"
+		"express-handlebars": "^8.0.1",
+		"uuid": "^10.0.0"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",
