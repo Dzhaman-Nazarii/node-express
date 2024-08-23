@@ -6,23 +6,22 @@ import { Card } from "../models/card.js";
 const cardRoutes = Router();
 
 cardRoutes.post("/add", async (req: Request, res: Response): Promise<void> => {
-	const course = await Course.getById(req.body.id);
-	await Card.add(course);
-	res.redirect("/card");
+    const course = await Course.getById(req.body.id);
+    await Card.add(course);
+    res.redirect("/card");
 });
 
 cardRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
-	const card = await Card.fetch();
-	res.render("card", {
-		title: "Card",
-		isCard: true,
-		courses: card.courses,
-		price: card.price,
-	})
+    const card = await Card.fetch();
+    res.render("card", {
+        title: "Card",
+        isCard: true,
+        courses: card.courses,
+        price: card.price,
+    });
 });
 
 cardRoutes.delete("/remove/:id", async (req: Request, res: Response): Promise<void> => {
-    console.log(`Received delete request for ID: ${req.params.id}`);
     try {
         const card = await Card.remove(req.params.id);
         res.json(card);
@@ -32,4 +31,4 @@ cardRoutes.delete("/remove/:id", async (req: Request, res: Response): Promise<vo
     }
 });
 
-export {cardRoutes};
+export { cardRoutes };

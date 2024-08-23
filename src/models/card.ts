@@ -30,9 +30,9 @@ class Card {
 		try {
 			const content = await fs.readFile("src/data/card.json", "utf-8");
 			const card = JSON.parse(content) as ICard;
-
+	
 			card.price = Number(card.price);
-
+	
 			return card;
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -47,12 +47,16 @@ class Card {
 		const card = await Card.fetch();
 	
 		const idx = card.courses.findIndex((c) => c.course.id === id);
+		if (idx === -1) {
+			throw new Error(`Course with ID ${id} not found in card.`);
+		}
+	
 		const course = card.courses[idx];
 	
 		if (course.count === 1) {
-			card.courses = card.courses.filter(c => c.course.id !== id);
+			card.courses.splice(idx, 1);
 		} else {
-			card.courses[idx].count--;
+			course.count--;
 		}
 	
 		card.price -= Number(course.course.price);
@@ -60,7 +64,7 @@ class Card {
 		try {
 			await fs.writeFile(
 				"src/data/card.json",
-				JSON.stringify(card, null, 2),
+				JSON.stringify(card, null, 2)
 			);
 			return card;
 		} catch (error) {
