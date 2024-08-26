@@ -1,4 +1,15 @@
 {
-  "courses": [],
-  "price": 100
+  "courses": [
+    {
+      "course": {
+        "_id": "66cc9b49b76cc6092739e2e1",
+        "title": "JS",
+        "price": 139,
+        "img": "https://quintagroup.com/cms/js/js-image/javascript-logo.png",
+        "__v": 0
+      },
+      "count": 1
+    }
+  ],
+  "price": 239
 }
