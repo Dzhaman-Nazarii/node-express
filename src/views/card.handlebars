@@ -1,6 +1,5 @@
 <div id="card" class="card">
     {{#if courses.length}}
-    <h1>Card</h1>
         <table>
             <thead>
                 <tr>
@@ -12,11 +11,11 @@
             <tbody>
                 {{#each courses}}
                     <tr>
-                        <td>{{course.title}}</td>
+                        <td>{{title}}</td>
                         <td>{{count}}</td>
                         <td>
                             <button
-                                data-id="{{course.id}}"
+                                data-id="{{id}}"
                                 class="btn btn-small js-remove"
                             >Delete</button>
                         </td>

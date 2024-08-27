@@ -28,14 +28,14 @@ app.set("views", "./src/views");
 
 app.use(async (req: Request, res: Response, next: NextFunction) => {
 	try {
-	  const user = await User.findById("66cca40cbe84546dc77444b4").exec();
-	  req.user = user as IUser | undefined;
-	  next();
+		const user = await User.findById("66cca40cbe84546dc77444b4").exec();
+		req.user = user as IUser | undefined;
+		next();
 	} catch (error) {
-	  console.error(error);
-	  res.status(500).send('Internal Server Error');
+		console.error(error);
+		res.status(500).send("Internal Server Error");
 	}
-  });
+});
 
 app.use(express.static("./dist/public"));
 app.use(express.static("./src/public"));
