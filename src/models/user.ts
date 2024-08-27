@@ -30,43 +30,40 @@ const userSchema = new Schema({
 
 userSchema.methods.addToCard = async function (course: ICourse): Promise<void> {
 	const clonedItems = [...this.card.items];
-	const idx = clonedItems.findIndex((c) => {
-		return c.courseId.toString() === course._id.toString();
-	});
+	const idx = clonedItems.findIndex((c) => c.courseId.toString() === course._id.toString());
+
 	if (idx >= 0) {
-		clonedItems[idx].count = clonedItems[idx].count + 1;
+		clonedItems[idx].count++;
 	} else {
 		clonedItems.push({
 			courseId: course._id,
 			count: 1,
 		});
 	}
-	const newCard = { items: clonedItems };
 
-	this.card = newCard;
-	return this.save();
+	this.card.items = clonedItems;
+	await this.save();
 };
 
 userSchema.methods.removeFromCard = async function (id: string): Promise<void> {
 	let clonedItems = [...this.card.items];
-	const idx = clonedItems.findIndex(
-		(c) => c.courseId.toString() === id.toString()
-	);
+	const idx = clonedItems.findIndex((c) => c.courseId.toString() === id.toString());
 
 	if (idx >= 0) {
-		// Якщо кількість курсу більше ніж 1, зменшуємо на 1
 		if (clonedItems[idx].count > 1) {
 			clonedItems[idx].count--;
 		} else {
-			// Якщо кількість курсу дорівнює 1, видаляємо цей курс з корзини
-			clonedItems = clonedItems.filter(
-				(c) => c.courseId.toString() !== id.toString()
-			);
+			clonedItems = clonedItems.filter((c) => c.courseId.toString() !== id.toString());
 		}
 
 		this.card.items = clonedItems;
 		await this.save();
 	}
+};
+
+userSchema.methods.clearCard = async function (): Promise<void> {
+	this.card.items = [];
+	await this.save();
 };
 
 const User = model("User", userSchema);

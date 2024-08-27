@@ -10,6 +10,7 @@ import { addRoutes } from "./routes/add.js";
 import { cardRoutes } from "./routes/card.js";
 import { User } from "./models/user.js";
 import { IUser } from "./models/user.interface.js";
+import { ordersRoutes } from "./routes/orders.js";
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/", homeRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/add", addRoutes);
 app.use("/card", cardRoutes);
+app.use("/orders", ordersRoutes);
 
 async function start() {
 	try {

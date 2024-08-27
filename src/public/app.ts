@@ -75,3 +75,23 @@ function updateCard(card: { courses: any[]; price: number }) {
 		cardElement.innerHTML = "<h1>Card is empty</h1>";
 	}
 }
+
+const toDate = (date: string | null): string => {
+	if (date === null) {
+		return "";
+	}
+	return new Intl.DateTimeFormat("ua-UA", {
+		day: "2-digit",
+		month: "long",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+	}).format(new Date(date));
+};
+
+document.querySelectorAll<HTMLSpanElement>(".date").forEach(node => {
+	if (node.textContent) {
+		node.textContent = toDate(node.textContent);
+	}
+});

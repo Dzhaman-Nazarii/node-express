@@ -1,9 +1,9 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { ICourse } from './course.interface';
 
 export interface ICardItem {
   count: number;
-  courseId: ICourse;
+  courseId: Types.ObjectId;
 }
 
 export interface IUser extends Document {
@@ -14,4 +14,5 @@ export interface IUser extends Document {
   };
   addToCard: (course: ICourse) => Promise<void>;
   removeFromCard: (id: string) => Promise<void>;
+  clearCard: () => Promise<void>;
 }

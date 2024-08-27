@@ -13,7 +13,6 @@ coursesRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 coursesRoutes.get(
 	"/:id",
 	async (req: Request, res: Response): Promise<void> => {
-		console.log("ID", req.params.id);
 		const course = await Course.findById(req.params.id);
 		res.render("course", {
 			layout: "empty",

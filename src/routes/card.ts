@@ -37,7 +37,7 @@ cardRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 			const course = c.courseId as unknown as ICourse & { _doc: ICourse };
 			return {
 				...course._doc,
-        id: c.courseId.id,
+				id: c.courseId.id,
 				count: c.count,
 			};
 		});
@@ -72,7 +72,9 @@ cardRoutes.delete(
 			}
 
 			const courses = user.card.items.map((c: ICardItem) => {
-				const course = c.courseId as unknown as ICourse & { _doc: ICourse };
+				const course = c.courseId as unknown as ICourse & {
+					_doc: ICourse;
+				};
 				return {
 					...course._doc,
 					id: c.courseId.id,
