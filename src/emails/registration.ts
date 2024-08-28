@@ -1,11 +1,11 @@
 import keys from "../keys/index.js";
-import { IRegistration } from "./registration.interface";
+import { IEmail } from "./email.interface.js";
 
-export default function (email: string): IRegistration {
+export default function (email: string): IEmail {
 	return {
 		to: email,
 		from: keys.EMAIL_FROM,
-		subject: keys.SUBJECT_EMAIL,
+		subject: keys.SUBJECT_REGISTER,
 		html: 
 			`<h1>Welcome to our store</h1>
 			<p>You have successfully created an account with email - ${email}</p>

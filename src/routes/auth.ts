@@ -2,9 +2,11 @@ import { Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import nodemailer from "nodemailer";
 import sendgrid from "nodemailer-sendgrid-transport";
 import registrationEmail from "../emails/registration.js";
+import resetEmail from "../emails/reset.js";
 
 dotenv.config();
 const transporter = nodemailer.createTransport(
@@ -96,6 +98,41 @@ authRoutes.post("/register", async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).redirect("/auth/login#register");
+	}
+});
+
+authRoutes.get("/reset", (req: Request, res: Response) => {
+	res.render("auth/reset", {
+		title: "Forget your password?",
+		resetError: req.flash("resetError"),
+	});
+});
+
+authRoutes.post("/reset", (req: Request, res: Response) => {
+	try {
+		crypto.randomBytes(32, async (error, buffer) => {
+			if (error) {
+				req.flash(
+					"resetError",
+					"Something went wrong, try again later"
+				);
+				return res.redirect("/auth/reset");
+			}
+			const token = buffer.toString("hex");
+			const candidate = await User.findOne({ email: req.body.email });
+			if (candidate) {
+				candidate.resetToken = token;
+				candidate.resetTokenExp = new Date(Date.now() + 60 * 60 * 1000);
+				await candidate.save();
+				await transporter.sendMail(resetEmail(candidate.email, token));
+				res.redirect("/auth/login#login")
+			} else {
+				req.flash("resetError", "There is no such email");
+				return res.redirect("/auth/reset");
+			}
+		});
+	} catch (error) {
+		console.log(error);
 	}
 });
 
