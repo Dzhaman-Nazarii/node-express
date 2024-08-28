@@ -5,6 +5,7 @@ import { engine } from "express-handlebars";
 import session from "express-session";
 import connectMongoDBSession from 'connect-mongodb-session';
 import variablesMiddleware from './middleware/variables.js';
+import userMiddleware from './middleware/user.js';
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import { homeRoutes } from "./routes/home.js";
@@ -47,6 +48,7 @@ app.use(
 	})
 );
 app.use(variablesMiddleware);
+app.use(userMiddleware);
 app.use("/", homeRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/add", addRoutes);
