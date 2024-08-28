@@ -1,5 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import dotenv from "dotenv";
+import flash from 'connect-flash';
 import mongoose from "mongoose";
 import { engine } from "express-handlebars";
 import session from "express-session";
@@ -47,6 +48,7 @@ app.use(
 		store
 	})
 );
+app.use(flash());
 app.use(variablesMiddleware);
 app.use(userMiddleware);
 app.use("/", homeRoutes);

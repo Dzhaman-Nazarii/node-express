@@ -1,13 +1,15 @@
 import { Request, Response, Router } from "express";
 import { User } from "../models/user.js";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 const authRoutes = Router();
 
-authRoutes.get("/login", async (req: Request, res: Response) => {
+authRoutes.get("/login", (req: Request, res: Response) => {
 	res.render("auth/login", {
 		title: "Authorization",
 		isLogin: true,
+		loginError: req.flash("loginError"),
+		registerError: req.flash("registerError"),
 	});
 });
 
@@ -28,18 +30,26 @@ authRoutes.post("/login", async (req: Request, res: Response) => {
 					}
 					return res.redirect("/");
 				});
-				return;
+			} else {
+				req.flash("loginError", "Password is incorrect");
+				res.redirect("/auth/login#login");
 			}
+		} else {
+			req.flash("loginError", "No such user exists");
+			res.redirect("/auth/login#login");
 		}
-		res.redirect("/auth/login#login");
 	} catch (error) {
 		console.error(error);
 		res.status(500).redirect("/auth/login#login");
 	}
 });
 
-authRoutes.get("/logout", async (req: Request, res: Response) => {
-	req.session.destroy(() => {
+authRoutes.get("/logout", (req: Request, res: Response) => {
+	req.session.destroy((error) => {
+		if (error) {
+			console.error(error);
+			return res.status(500).redirect("/auth/login#login");
+		}
 		res.redirect("/auth/login#login");
 	});
 });
@@ -48,20 +58,30 @@ authRoutes.post("/register", async (req: Request, res: Response) => {
 	try {
 		const { email, password, name, repeat } = req.body;
 		const candidate = await User.findOne({ email });
+
 		if (candidate) {
-			res.redirect("/auth/login#register");
+			req.flash("registerError", "User already exists");
+			return res.redirect("/auth/login#register");
 		}
-		const hashPassword = await bcrypt.hash(password, 10)
+
+		if (password === repeat) {
+			req.flash("registerError", "Passwords do not match");
+			return res.redirect("/auth/login#register");
+		}
+
+		const hashPassword = await bcrypt.hash(password, 10);
 		const user = new User({
 			email,
 			name,
 			password: hashPassword,
 			card: { items: [] },
 		});
+
 		await user.save();
 		res.redirect("/auth/login#login");
 	} catch (error) {
-		console.log(error);
+		console.error(error);
+		res.status(500).redirect("/auth/login#register");
 	}
 });
 
