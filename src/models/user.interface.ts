@@ -9,6 +9,7 @@ export interface ICardItem {
 export interface IUser extends Document {
   email: string;
   name: string;
+  password: string;
   card?: {
     items: ICardItem[];
   };
