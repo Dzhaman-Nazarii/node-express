@@ -1,14 +1,14 @@
 import { Request, Response, Router } from "express";
 import { Course } from "../models/course.js";
+import auth from '../middleware/auth.js';
 
 const addRoutes = Router();
 
-addRoutes.get("/", (req: Request, res: Response): void => {
+addRoutes.get("/", auth, (req: Request, res: Response): void => {
 	res.render("add", { title: "Add page", isAdd: true });
 });
 
-addRoutes.post("/", async (req: Request, res: Response): Promise<void> => {
-	// const course = new Course(req.body.title, req.body.price, req.body.img);
+addRoutes.post("/", auth, async (req: Request, res: Response): Promise<void> => {
 	const course = new Course({
 		title: req.body.title, price: req.body.price, img: req.body.img, userId: req.user
 	})

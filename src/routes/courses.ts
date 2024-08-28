@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { Course } from "../models/course.js";
+import auth from '../middleware/auth.js';
 
 const coursesRoutes = Router();
 
@@ -24,6 +25,7 @@ coursesRoutes.get(
 
 coursesRoutes.get(
 	"/:id/edit",
+	auth,
 	async (req: Request, res: Response): Promise<void> => {
 		if (!req.query.allow) {
 			return res.redirect("/");
@@ -35,6 +37,7 @@ coursesRoutes.get(
 
 coursesRoutes.post(
 	"/edit",
+	auth,
 	async (req: Request, res: Response): Promise<void> => {
 		const { id } = req.body;
 		delete req.body.id;
@@ -45,6 +48,7 @@ coursesRoutes.post(
 
 coursesRoutes.post(
 	"/remove",
+	auth,
 	async (req: Request, res: Response): Promise<void> => {
 		try {
 			await Course.deleteOne({

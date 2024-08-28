@@ -3,10 +3,11 @@ import { Request, Response } from "express";
 import { Course } from "../models/course.js";
 import { ICourse } from "../models/course.interface.js";
 import { ICardItem } from "../models/user.interface.js";
+import auth from '../middleware/auth.js';
 
 const cardRoutes = Router();
 
-cardRoutes.post("/add", async (req: Request, res: Response): Promise<void> => {
+cardRoutes.post("/add", auth, async (req: Request, res: Response): Promise<void> => {
 	try {
 		const course = await Course.findById(req.body.id);
 
@@ -22,7 +23,7 @@ cardRoutes.post("/add", async (req: Request, res: Response): Promise<void> => {
 	}
 });
 
-cardRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
+cardRoutes.get("/", auth, async (req: Request, res: Response): Promise<void> => {
 	try {
 		const user = (await req.user?.populate("card.items.courseId")) as {
 			card: { items: ICardItem[] } | undefined;
@@ -60,6 +61,7 @@ cardRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 
 cardRoutes.delete(
 	"/remove/:id",
+	auth,
 	async (req: Request, res: Response): Promise<void> => {
 		try {
 			await req.user?.removeFromCard(req.params.id);

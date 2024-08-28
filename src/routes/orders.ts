@@ -2,10 +2,11 @@ import { Request, Response, Router } from "express";
 import { Order } from "../models/order.js";
 import { IOrderCourse, IUser } from "../models/order.interface";
 import { ICourse } from "../models/course.interface.js";
+import auth from "../middleware/auth.js";
 
 const ordersRoutes = Router();
 
-ordersRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
+ordersRoutes.get("/", auth, async (req: Request, res: Response): Promise<void> => {
 	try {
 		if (!req.user) {
 			res.status(401).send("User not authenticated");
@@ -38,7 +39,7 @@ ordersRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 	}
 });
 
-ordersRoutes.post("/", async (req: Request, res: Response): Promise<void> => {
+ordersRoutes.post("/", auth, async (req: Request, res: Response): Promise<void> => {
 	try {
 		const user = (await req.user?.populate("card.items.courseId")) as {
 			card: { items: { courseId: any; count: number }[] } | undefined;
