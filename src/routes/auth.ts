@@ -1,6 +1,19 @@
 import { Request, Response, Router } from "express";
+import dotenv from "dotenv";
 import { User } from "../models/user.js";
 import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import sendgrid from "nodemailer-sendgrid-transport";
+import registrationEmail from "../emails/registration.js";
+
+dotenv.config();
+const transporter = nodemailer.createTransport(
+	sendgrid({
+		auth: {
+			api_key: process.env.SENDGRID_API_KEY as string,
+		},
+	})
+);
 
 const authRoutes = Router();
 
@@ -78,6 +91,7 @@ authRoutes.post("/register", async (req: Request, res: Response) => {
 		});
 
 		await user.save();
+		await transporter.sendMail(registrationEmail(email));
 		res.redirect("/auth/login#login");
 	} catch (error) {
 		console.error(error);

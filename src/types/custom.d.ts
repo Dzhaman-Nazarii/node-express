@@ -39,3 +39,17 @@ declare module 'connect-mongodb-session' {
 
   export = connectMongoDBSession;
 }
+
+declare module "nodemailer-sendgrid-transport" {
+  import { Transporter } from "nodemailer";
+
+  interface SendGridOptions {
+    auth: {
+      api_key: string;
+    };
+  }
+
+  function sendgrid(options: SendGridOptions): Transporter;
+
+  export = sendgrid;
+}
