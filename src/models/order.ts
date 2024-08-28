@@ -4,7 +4,8 @@ const orderSchema = new Schema({
 	courses: [
 		{
 			course: {
-				type: Object,
+				type: Schema.Types.ObjectId,
+				ref: "Course",
 				required: true,
 			},
 			count: {

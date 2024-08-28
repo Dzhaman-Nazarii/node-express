@@ -1,7 +1,8 @@
 import { Document, Types } from "mongoose";
+import { ICourse } from "./course.interface";
 
 interface IOrderCourse {
-  course: Record<string, unknown>;
+  course: Types.ObjectId | ICourse;
   count: number;
 }
 

@@ -15,9 +15,9 @@ ordersRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 		const orders = await Order.find({
 			"user.userId": req.user._id,
 		})
-		.populate("user.userId")
-		.populate("courses.course")
-		.lean();
+			.populate("user.userId")
+			.populate("courses.course")
+			.lean();
 
 		res.render("orders", {
 			title: "Orders",
@@ -25,8 +25,9 @@ ordersRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
 			orders: orders.map((order) => {
 				return {
 					...order,
-					price: order.courses.reduce((total, course) => {
-						return total + (course.count * (course.course as ICourse).price);
+					price: order.courses.reduce((total, c) => {
+						const course = c.course as unknown as ICourse;
+						return total + c.count * course.price;
 					}, 0),
 				};
 			}),
