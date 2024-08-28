@@ -15,8 +15,8 @@ import { addRoutes } from "./routes/add.js";
 import { cardRoutes } from "./routes/card.js";
 import { ordersRoutes } from "./routes/orders.js";
 import { authRoutes } from "./routes/auth.js";
+import keys from './keys/index.js';
 
-const MONGODB_URI = "mongodb+srv://Nazarii:DkYgW.dCdt2AyH3@cluster0.nxh4bxc.mongodb.net/Shop";
 const app = express();
 
 dotenv.config();
@@ -31,7 +31,7 @@ app.engine(
 
 const MongoDBStore = connectMongoDBSession(session);
 const store = new MongoDBStore({
-	uri: MONGODB_URI,
+	uri: keys.MONGODB_URI,
 	collection: 'sessions',
   });
 
@@ -42,7 +42,7 @@ app.use(express.static("./src/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(
 	session({
-		secret: "some secret value",
+		secret: keys.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		store
@@ -60,7 +60,7 @@ app.use("/auth", authRoutes);
 
 async function start() {
 	try {
-		await mongoose.connect(MONGODB_URI);
+		await mongoose.connect(keys.MONGODB_URI);
 		app.listen(PORT, () => {
 			console.log(`Server is running on port ${PORT}`);
 		});
