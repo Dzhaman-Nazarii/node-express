@@ -11,6 +11,7 @@ import { cardRoutes } from "./routes/card.js";
 import { User } from "./models/user.js";
 import { IUser } from "./models/user.interface.js";
 import { ordersRoutes } from "./routes/orders.js";
+import { authRoutes } from "./routes/auth.js";
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/courses", coursesRoutes);
 app.use("/add", addRoutes);
 app.use("/card", cardRoutes);
 app.use("/orders", ordersRoutes);
+app.use("/auth", authRoutes);
 
 async function start() {
 	try {

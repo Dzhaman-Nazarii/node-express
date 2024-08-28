@@ -18,14 +18,17 @@
 	"license": "ISC",
 	"dependencies": {
 		"@handlebars/allow-prototype-access": "^1.0.5",
+		"@types/express-session": "^1.18.0",
 		"@types/uuid": "^10.0.0",
 		"express": "^4.19.2",
 		"express-handlebars": "^8.0.1",
+		"express-session": "^1.18.0",
 		"mongoose": "^8.5.4",
 		"uuid": "^10.0.0"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",
+		"@types/materialize-css": "^1.0.14",
 		"dotenv": "^16.4.5",
 		"typescript": "^5.5.4"
 	}
