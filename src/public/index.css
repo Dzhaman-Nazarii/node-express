@@ -52,3 +52,12 @@
 	background: rgb(255, 0, 0, 0.3);
 	color: red;
 }
+
+.user-name {
+	margin-top: 1rem;
+}
+
+.avatar {
+	max-width: 300px;;
+	height: auto;
+}

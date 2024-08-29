@@ -1,0 +1,39 @@
+<h1>Profile</h1>
+
+<div class="row">
+	<div class="col s6">
+		<img
+			class="avatar"
+			src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsCZhu7x_5zyALJEBUXomJ8MAQzT1Cd04YOg&s"
+			alt="avatar"
+		/>
+		<h4>No avatar</h4>
+	</div>
+	<div class="col s6">
+		<form action="/profile" method="post">
+			<div class="input-field">
+				<p>Your email: <strong>{{user.email}}</strong></p>
+				<input
+					id="name"
+					name="name"
+					type="text"
+					class="validate"
+					required
+					value="{{user.title}}"
+				/>
+				<label class="user-name" for="name">User name</label>
+				<span class="helper-text" data-error="Add name"></span>
+			</div>
+			<div class="file-field input-field">
+				<div class="btn">
+					<span>Avatar</span>
+					<input type="file" name="avatar" />
+				</div>
+				<div class="file-path-wrapper">
+					<input class="file-path validate" type="text" />
+				</div>
+			</div>
+			<button type="submit" class="btn">Edit</button>
+		</form>
+	</div>
+</div>

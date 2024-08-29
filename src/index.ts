@@ -1,13 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
-import flash from 'connect-flash';
+import flash from "connect-flash";
 import mongoose from "mongoose";
 import { engine } from "express-handlebars";
 import session from "express-session";
-import connectMongoDBSession from 'connect-mongodb-session';
-import variablesMiddleware from './middleware/variables.js';
-import userMiddleware from './middleware/user.js';
-import errorMiddleware from './middleware/error.js';
+import connectMongoDBSession from "connect-mongodb-session";
+import variablesMiddleware from "./middleware/variables.js";
+import userMiddleware from "./middleware/user.js";
+import errorMiddleware from "./middleware/error.js";
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import { homeRoutes } from "./routes/home.js";
@@ -16,7 +16,8 @@ import { addRoutes } from "./routes/add.js";
 import { cardRoutes } from "./routes/card.js";
 import { ordersRoutes } from "./routes/orders.js";
 import { authRoutes } from "./routes/auth.js";
-import keys from './keys/index.js';
+import keys from "./keys/index.js";
+import { profileRoutes } from "./routes/profile.js";
 
 const app = express();
 
@@ -33,8 +34,8 @@ app.engine(
 const MongoDBStore = connectMongoDBSession(session);
 const store = new MongoDBStore({
 	uri: keys.MONGODB_URI,
-	collection: 'sessions',
-  });
+	collection: "sessions",
+});
 
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
@@ -46,7 +47,7 @@ app.use(
 		secret: keys.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
-		store
+		store,
 	})
 );
 app.use(flash());
@@ -58,7 +59,8 @@ app.use("/add", addRoutes);
 app.use("/card", cardRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/auth", authRoutes);
-app.use(errorMiddleware)
+app.use("/profile", profileRoutes);
+app.use(errorMiddleware);
 
 async function start() {
 	try {
