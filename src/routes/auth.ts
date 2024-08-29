@@ -7,6 +7,8 @@ import nodemailer from "nodemailer";
 import sendgrid from "nodemailer-sendgrid-transport";
 import registrationEmail from "../emails/registration.js";
 import resetEmail from "../emails/reset.js";
+import { body, validationResult } from "express-validator";
+import { registerValidators } from "../utils/validators.js";
 
 dotenv.config();
 const transporter = nodemailer.createTransport(
@@ -69,17 +71,23 @@ authRoutes.get("/logout", (req: Request, res: Response) => {
 	});
 });
 
-authRoutes.post("/register", async (req: Request, res: Response) => {
+authRoutes.post("/register", registerValidators, async (req: Request, res: Response) => {
 	try {
-		const { email, password, name, repeat } = req.body;
+		const { email, password, name, confirm } = req.body;
 		const candidate = await User.findOne({ email });
+
+		const errors = validationResult(req);
+		if(!errors.isEmpty()) {
+			req.flash("registerError", errors.array()[0].msg);
+			return res.status(422).redirect("/auth/login#register");
+		}
 
 		if (candidate) {
 			req.flash("registerError", "User already exists");
 			return res.redirect("/auth/login#register");
 		}
 
-		if (password === repeat) {
+		if (password === confirm) {
 			req.flash("registerError", "Passwords do not match");
 			return res.redirect("/auth/login#register");
 		}
