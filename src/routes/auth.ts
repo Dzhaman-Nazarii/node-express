@@ -8,7 +8,7 @@ import sendgrid from "nodemailer-sendgrid-transport";
 import registrationEmail from "../emails/registration.js";
 import resetEmail from "../emails/reset.js";
 import { body, validationResult } from "express-validator";
-import { registerValidators } from "../utils/validators.js";
+import { loginValidators, registerValidators } from "../utils/validators.js";
 
 dotenv.config();
 const transporter = nodemailer.createTransport(
@@ -30,36 +30,50 @@ authRoutes.get("/login", (req: Request, res: Response) => {
 	});
 });
 
-authRoutes.post("/login", async (req: Request, res: Response) => {
-	try {
-		const { email, password } = req.body;
-		const candidate = await User.findOne({ email });
+authRoutes.post(
+	"/login",
+	loginValidators,
+	async (req: Request, res: Response) => {
+		try {
+			const { email, password } = req.body;
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				req.flash("loginError", errors.array()[0].msg);
+				return res.status(422).redirect("/auth/login#login");
+			}
+			const candidate = await User.findOne({ email });
 
-		if (candidate) {
-			const isSame = await bcrypt.compare(password, candidate.password);
-			if (isSame) {
-				req.session.user = candidate;
-				req.session.isAuthenticated = true;
-				req.session.save((error) => {
-					if (error) {
-						console.error(error);
-						return res.status(500).redirect("/auth/login#login");
-					}
-					return res.redirect("/");
-				});
+			if (candidate) {
+				const isSame = await bcrypt.compare(
+					password,
+					candidate.password
+				);
+				if (isSame) {
+					req.session.user = candidate;
+					req.session.isAuthenticated = true;
+					req.session.save((error) => {
+						if (error) {
+							console.error(error);
+							return res
+								.status(500)
+								.redirect("/auth/login#login");
+						}
+						return res.redirect("/");
+					});
+				} else {
+					req.flash("loginError", "Password is incorrect");
+					res.redirect("/auth/login#login");
+				}
 			} else {
-				req.flash("loginError", "Password is incorrect");
+				req.flash("loginError", "No such user exists");
 				res.redirect("/auth/login#login");
 			}
-		} else {
-			req.flash("loginError", "No such user exists");
-			res.redirect("/auth/login#login");
+		} catch (error) {
+			console.error(error);
+			res.status(500).redirect("/auth/login#login");
 		}
-	} catch (error) {
-		console.error(error);
-		res.status(500).redirect("/auth/login#login");
 	}
-});
+);
 
 authRoutes.get("/logout", (req: Request, res: Response) => {
 	req.session.destroy((error) => {

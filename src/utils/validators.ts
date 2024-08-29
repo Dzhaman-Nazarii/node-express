@@ -34,3 +34,25 @@ export const registerValidators = [
 		.withMessage("Name must contain at least 3 characters")
 		.trim(),
 ];
+
+export const loginValidators = [
+	body("email")
+		.isEmail()
+		.withMessage("Enter valid email")
+		.custom(async (value, { req }) => {
+			try {
+				const user = await User.findOne({ email: value });
+				if (user) {
+					return Promise.reject("Incorrect email");
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		})
+		.normalizeEmail(),
+	body("password")
+		.isLength({ min: 6, max: 56 })
+		.isAlphanumeric()
+		.trim()
+		.withMessage("Incorrect password"),
+];
