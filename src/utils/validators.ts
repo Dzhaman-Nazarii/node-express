@@ -56,3 +56,12 @@ export const loginValidators = [
 		.trim()
 		.withMessage("Incorrect password"),
 ];
+
+export const courseValidators = [
+	body("title")
+		.isLength({ min: 3 })
+		.trim()
+		.withMessage("Title must contain at least 3 characters"),
+	body("price").isNumeric().withMessage("Enter the correct price"),
+	body("img").isURL().withMessage("Enter correct URL"),
+];

@@ -7,6 +7,7 @@ import session from "express-session";
 import connectMongoDBSession from 'connect-mongodb-session';
 import variablesMiddleware from './middleware/variables.js';
 import userMiddleware from './middleware/user.js';
+import errorMiddleware from './middleware/error.js';
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import { homeRoutes } from "./routes/home.js";
@@ -57,6 +58,7 @@ app.use("/add", addRoutes);
 app.use("/card", cardRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/auth", authRoutes);
+app.use(errorMiddleware)
 
 async function start() {
 	try {
