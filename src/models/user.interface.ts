@@ -10,6 +10,7 @@ export interface IUser extends Document {
   email: string;
   name: string;
   password: string;
+  avatarUrl?: string;
   resetToken?: string,
 	resetTokenExp?: Date,
   card?: {

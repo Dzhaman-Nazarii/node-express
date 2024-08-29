@@ -2,15 +2,18 @@
 
 <div class="row">
 	<div class="col s6">
-		<img
-			class="avatar"
-			src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsCZhu7x_5zyALJEBUXomJ8MAQzT1Cd04YOg&s"
-			alt="avatar"
-		/>
-		<h4>No avatar</h4>
+		{{#if user.avatarUrl}}
+			<img
+				class="avatar"
+				src="{{user.avatarUrl}}"
+				alt="avatar-{{user.name}}"
+			/>
+		{{else}}
+			<h4>No avatar</h4>
+		{{/if}}
 	</div>
 	<div class="col s6">
-		<form action="/profile" method="post">
+		<form action="/profile" method="post" enctype="multipart/form-data">
 			<div class="input-field">
 				<p>Your email: <strong>{{user.email}}</strong></p>
 				<input

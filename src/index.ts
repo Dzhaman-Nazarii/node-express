@@ -18,6 +18,7 @@ import { ordersRoutes } from "./routes/orders.js";
 import { authRoutes } from "./routes/auth.js";
 import keys from "./keys/index.js";
 import { profileRoutes } from "./routes/profile.js";
+import { fileMiddleware } from "./middleware/file.js";
 
 const app = express();
 
@@ -40,6 +41,7 @@ const store = new MongoDBStore({
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 app.use(express.static("./dist/public"));
+app.use('/src/images', express.static('./src/images'));
 app.use(express.static("./src/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -50,6 +52,7 @@ app.use(
 		store,
 	})
 );
+app.use(fileMiddleware.single("avatar"));
 app.use(flash());
 app.use(variablesMiddleware);
 app.use(userMiddleware);
