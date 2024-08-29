@@ -71,43 +71,36 @@ authRoutes.get("/logout", (req: Request, res: Response) => {
 	});
 });
 
-authRoutes.post("/register", registerValidators, async (req: Request, res: Response) => {
-	try {
-		const { email, password, name, confirm } = req.body;
-		const candidate = await User.findOne({ email });
+authRoutes.post(
+	"/register",
+	registerValidators,
+	async (req: Request, res: Response) => {
+		try {
+			const { email, password, name } = req.body;
 
-		const errors = validationResult(req);
-		if(!errors.isEmpty()) {
-			req.flash("registerError", errors.array()[0].msg);
-			return res.status(422).redirect("/auth/login#register");
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				req.flash("registerError", errors.array()[0].msg);
+				return res.status(422).redirect("/auth/login#register");
+			}
+
+			const hashPassword = await bcrypt.hash(password, 10);
+			const user = new User({
+				email,
+				name,
+				password: hashPassword,
+				card: { items: [] },
+			});
+
+			await user.save();
+			await transporter.sendMail(registrationEmail(email));
+			res.redirect("/auth/login#login");
+		} catch (error) {
+			console.error(error);
+			res.status(500).redirect("/auth/login#register");
 		}
-
-		if (candidate) {
-			req.flash("registerError", "User already exists");
-			return res.redirect("/auth/login#register");
-		}
-
-		if (password === confirm) {
-			req.flash("registerError", "Passwords do not match");
-			return res.redirect("/auth/login#register");
-		}
-
-		const hashPassword = await bcrypt.hash(password, 10);
-		const user = new User({
-			email,
-			name,
-			password: hashPassword,
-			card: { items: [] },
-		});
-
-		await user.save();
-		await transporter.sendMail(registrationEmail(email));
-		res.redirect("/auth/login#login");
-	} catch (error) {
-		console.error(error);
-		res.status(500).redirect("/auth/login#register");
 	}
-});
+);
 
 authRoutes.get("/reset", (req: Request, res: Response) => {
 	res.render("auth/reset", {
@@ -133,7 +126,7 @@ authRoutes.post("/reset", (req: Request, res: Response) => {
 				candidate.resetTokenExp = new Date(Date.now() + 60 * 60 * 1000);
 				await candidate.save();
 				await transporter.sendMail(resetEmail(candidate.email, token));
-				res.redirect("/auth/login#login")
+				res.redirect("/auth/login#login");
 			} else {
 				req.flash("resetError", "There is no such email");
 				return res.redirect("/auth/reset");
