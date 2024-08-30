@@ -4,8 +4,8 @@ import { IEmail } from "./email.interface.js";
 export default function (email: string): IEmail {
 	return {
 		to: email,
-		from: keys.EMAIL_FROM,
-		subject: keys.SUBJECT_REGISTER,
+		from: keys.EMAIL_FROM as string,
+		subject: keys.SUBJECT_REGISTER as string,
 		html: 
 			`<h1>Welcome to our store</h1>
 			<p>You have successfully created an account with email - ${email}</p>

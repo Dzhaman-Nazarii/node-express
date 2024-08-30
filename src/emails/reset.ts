@@ -4,8 +4,8 @@ import { IEmail } from "./email.interface";
 export default function (email: string, token: string): IEmail {
 	return {
 		to: email,
-		from: keys.EMAIL_FROM,
-		subject: keys.SUBJECT_RESET,
+		from: keys.EMAIL_FROM as string,
+		subject: keys.SUBJECT_RESET as string,
 		html: 
 			`<h1>You forget password</h1>
 			<p>If not, ignore this letter</p>
