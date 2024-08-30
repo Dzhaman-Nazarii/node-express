@@ -4,7 +4,7 @@
     "lib": ["dom", "ES2020"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
+    "module": "ESNext",
     "rootDir": "./src",
     "moduleResolution": "node",
     "typeRoots": ["./node_modules/@types", "./src/types"],
