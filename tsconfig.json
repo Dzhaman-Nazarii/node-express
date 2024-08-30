@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "lib": ["dom", "es2016"],
+    "lib": ["dom", "es6"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "ESNext",
+    "rootDir": "./src",
     "moduleResolution": "node",
     "paths": {
       "nodemailer-sendgrid-transport": ["./src/types/custom.d.ts"]
     },
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
