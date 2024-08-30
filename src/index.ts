@@ -20,6 +20,7 @@ import keys from "./keys/index.js";
 import { profileRoutes } from "./routes/profile.js";
 import { fileMiddleware } from "./middleware/file.js";
 import helmet from "helmet";
+import compression from "compression";
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use(
 	  },
 	})
   );
+app.use(compression());
 app.use("/", homeRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/add", addRoutes);

@@ -18,6 +18,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
+		"compression": "^1.7.4",
 		"connect-flash": "^0.1.1",
 		"connect-mongodb-session": "^5.0.0",
 		"express": "^4.19.2",
@@ -33,6 +34,7 @@
 	"devDependencies": {
 		"@handlebars/allow-prototype-access": "^1.0.5",
 		"@types/bcryptjs": "^2.4.6",
+		"@types/compression": "^1.7.5",
 		"@types/connect-flash": "^0.0.40",
 		"@types/connect-mongodb-session": "^2.4.7",
 		"@types/express": "^4.17.21",
